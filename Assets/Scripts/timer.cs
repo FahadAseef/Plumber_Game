@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class timer : MonoBehaviour
 {
     public TextMeshProUGUI timerText;
-    private float countdownTime = 60f;
+    private float countdownTime = 360f;
     private float loweringSpeed = 5f;
     private float remainingTime;
     [SerializeField] GameObject deathPanel;

@@ -1,91 +1,122 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class sprite_Dragger : MonoBehaviour
+public class sprite_Dragger : MonoBehaviour,IBeginDragHandler, IDragHandler,IEndDragHandler
 {
 
-    private bool havingTheSprite;
-    private float startPositionX;
-    private float startPositionY;
+    [HideInInspector] public Transform parentAfterDrag;
+    public Image image;
+    public Image childImage;
 
-    private Vector2 originalPosition;
-    private Vector2 newPosition;
+    //public Vector2 originalPos;
 
-    public GameObject[] sprites;
-    private Vector2 offset;
+    //private void Start()
+    //{
+    //originalPos = transform.position;
+    //}
 
-    // Start is called before the first frame update
-    void Start()
+    public void OnBeginDrag(PointerEventData eventData)
     {
-        
+        parentAfterDrag = transform.parent;
+        transform.SetParent(transform.root);
+        transform.SetAsLastSibling();
+        image.raycastTarget = false;
+        childImage.raycastTarget = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnDrag(PointerEventData eventData)
     {
-        if (havingTheSprite)
-        {
-            Vector2 mousePosition;
-            mousePosition = Input.mousePosition;
-            mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        
+        transform.position=Input.mousePosition;
+        //image.raycastTarget = false;
+    }
 
-            this.transform.position = mousePosition + offset;
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        transform.SetParent(parentAfterDrag);
+        image.raycastTarget = true;
+        childImage.raycastTarget = true;
+    }
+
+    /*
+    private bool isDragging;
+    private Vector2 offset;
+    private Vector2 original_Position;
+
+    slot _slot;
+
+    [SerializeField] Transform[] slotTransform;
+    private bool isPlaced;
+    [SerializeField] GameObject[] slots;
+    private float dropDistance=0.5f;
+
+    private void Start()
+    {
+        original_Position = transform.position;
+    }
+    private void Update()
+    {
+        if (isPlaced) return;
+        if (!isDragging)
+        {
+            return;
         }
 
-        fireScreenRay();
+        var mousePosition = getMousePos();
+        transform.position = mousePosition-offset; 
+
     }
 
     private void OnMouseDown()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            havingTheSprite=true;
-        }
+        isDragging = true;
+        offset = getMousePos() - (Vector2)transform.position;
+    }
+
+    Vector2 getMousePos()
+    {
+        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
     private void OnMouseUp()
     {
-        havingTheSprite = false;
-        Vector2 mousePosition = Input.mousePosition;
-        mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        //Vector2 mouseUpPosition=getMousePos();
+        //if (Vector2.Distance(transform.position, mouseUpPosition) < 0.5)
+        //{
+        //    transform.position = mouseUpPosition;
+        //    isDragging = false;
+        //    isPlaced = true;
+        //}
+        //else
+        //{
+        //    isPlaced=false;
+        //    transform.position = original_Position;
+        //}
+        //for(int i = 0; i < slots.Length; i++)
+        //{
+        //    float distance = Vector2.Distance(transform.position, slots[i].transform.position);
+        //    if(distance > dropDistance)
+        //    {
+        //        transform.position = slots[i].transform.position;
+        //        isDragging = false;
+        //        isPlaced = true;
+        //    }
+        //    else
+        //    {
+        //        transform.position = original_Position;
+        //        //isDragging = false;
+        //    }
+         
+        //}
 
-        Collider2D hitCollider = Physics2D.OverlapPoint(mousePosition);
-
-        if (hitCollider != null)
-        {
-            Debug.Log("Hit collider: " + hitCollider.gameObject.name + " at position: " + hitCollider.transform.localPosition);
-        }
-        else
-        {
-            Debug.Log("No collider found at mouse position: " + mousePosition);
-        }
-
-
-
-        if (hitCollider != null && hitCollider.gameObject != this.gameObject)
-        {
-            newPosition = hitCollider.transform.localPosition;
-            hitCollider.transform.localPosition = originalPosition;
-            this.transform.localPosition = newPosition;
-
-            Debug.Log("Swapped positions: " + this.gameObject.name + " with " + hitCollider.gameObject.name);
-        }
-        else
-        {
-            this.transform.localPosition = originalPosition;
-
-            Debug.Log("Returned to original position: " + originalPosition);
-        }
+        transform.position = original_Position;
+        isDragging = false;
+        isPlaced = false;
     }
-
-    void fireScreenRay()
-    {
-        Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(cameraRay,out RaycastHit hitObject))
-        {
-            Debug.Log("the ray hit position is"+ hitObject.transform.localPosition);
-        }
-    }
+    */
 
 }
