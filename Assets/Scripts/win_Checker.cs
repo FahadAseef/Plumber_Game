@@ -20,7 +20,7 @@ public class win_Checker : MonoBehaviour
 
     private void Update()
     {
-        if (L_TO_R.transform.parent == slot1.transform)
+        if (L_TO_R.transform.parent == slot1.transform && !win_UI.gameObject.activeSelf)
         {
             if(L_TO_R2.transform.parent == slot2.transform)
             {
