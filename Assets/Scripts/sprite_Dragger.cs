@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class sprite_Dragger : MonoBehaviour,IBeginDragHandler, IDragHandler,IEndDragHandler
@@ -18,6 +20,19 @@ public class sprite_Dragger : MonoBehaviour,IBeginDragHandler, IDragHandler,IEnd
     //{
     //originalPos = transform.position;
     //}
+
+    //public Transform correctSlot;
+    //win_Checker winChecker;
+    //[SerializeField] private win_Checker win_Checker;
+    //[SerializeField] private win_Checker win_Checker2;
+    private win_Checker win_Checker;
+    private win_Checker_2 win_Checker2;
+
+    private void Update()
+    {
+        win_Checker = FindObjectOfType<win_Checker>();
+        win_Checker2 = FindObjectOfType<win_Checker_2>();
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -40,7 +55,21 @@ public class sprite_Dragger : MonoBehaviour,IBeginDragHandler, IDragHandler,IEnd
         transform.SetParent(parentAfterDrag);
         image.raycastTarget = true;
         childImage.raycastTarget = true;
+
+        // Check if the game is won after every drag end
+        //gameManager.Instance.CheckWinCondition();
+        //winChecker.wincheck();
+        Scene activeScene = SceneManager.GetActiveScene();
+        if (activeScene.buildIndex == 1)
+            win_Checker.wincheck();
+        if(activeScene.buildIndex == 2)
+            win_Checker2.wincheck();
+
+
     }
+
+
+
 
     /*
     private bool isDragging;

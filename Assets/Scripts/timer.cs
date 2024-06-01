@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class timer : MonoBehaviour
 {
     public TextMeshProUGUI timerText;
-    private float countdownTime = 90f;
+    private float countdownTime = 1000f;
     private float loweringSpeed = 5f;
     private float remainingTime;
     [SerializeField] GameObject deathPanel;
@@ -60,7 +60,7 @@ public class timer : MonoBehaviour
 
     public void nextLevel()
     {
-        SceneManager.LoadScene("Level_2");
+        SceneManager.LoadScene("Level_3");
         Debug.Log("calling next level");
     }
 }
